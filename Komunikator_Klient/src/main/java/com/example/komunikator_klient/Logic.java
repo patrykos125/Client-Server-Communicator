@@ -33,25 +33,28 @@ public class Logic {
 
 
     public void sendMessage(String messageToSend) {
+new Thread(new Runnable() {
+    @Override
+    public void run() {
+        try {
 
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
 
+            bufferedWriter.write(username + ": " + messageToSend);
+            bufferedWriter.newLine();
+            bufferedWriter.flush();
 
-                    bufferedWriter.write(username + ": " + messageToSend);
-                    bufferedWriter.newLine();
-                    bufferedWriter.flush();
+        } catch (IOException e) {
 
-                } catch (IOException e) {
-
-                    closeEverything();
-                }
-            }
-        }).start();
-
+            closeEverything();
+        }
     }
+}).start();
+
+
+            }
+
+
+
 
 
     public void listenForMessage(VBox vbox) {
@@ -65,7 +68,6 @@ public class Logic {
 
                         msgFromGroupChat = bufferedReader.readLine();
 
-                        System.out.println(msgFromGroupChat);
 
                         Controler_login.receiveMessage(msgFromGroupChat, vbox);
 
