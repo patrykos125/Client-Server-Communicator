@@ -65,16 +65,16 @@ public class Controler_login {
         if (logic.validNick()) {
 
             usednickErroor.setText("");
-            Parent root = FXMLLoader.load(getClass().getResource("main-view.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("main-view.fxml"));
+            fxmlLoader.setController(this);
 
+            Parent root = fxmlLoader.load();
             Stage window = (Stage) connectButton.getScene().getWindow();
             window.setScene(new Scene(root, 600, 400));
 
-
-
+            sendButton.setOnAction(actionEvent -> sendMessage());
 
             logic.listenForMessage(messageList);
-
 
         } else {
             usednickErroor.setText("Your nick is already used");
