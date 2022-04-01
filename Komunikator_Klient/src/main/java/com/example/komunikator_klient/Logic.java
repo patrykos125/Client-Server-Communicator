@@ -39,7 +39,7 @@ new Thread(new Runnable() {
         try {
 
 
-            bufferedWriter.write(username + ": " + messageToSend);
+            bufferedWriter.write(username + " : " + messageToSend);
             bufferedWriter.newLine();
             bufferedWriter.flush();
 
@@ -69,7 +69,7 @@ new Thread(new Runnable() {
                         msgFromGroupChat = bufferedReader.readLine();
 
 
-                        Controler_login.receiveMessage(msgFromGroupChat, vbox);
+                        Controler_main.receiveMessage(msgFromGroupChat, vbox);
 
 
                     } catch (IOException e) {
