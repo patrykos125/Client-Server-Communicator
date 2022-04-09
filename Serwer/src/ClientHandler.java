@@ -9,23 +9,15 @@ import java.io.*;
 import java.net.Socket;
 import java.util.ArrayList;
 
-/**
- * When a client connects the server spawns a thread to handle the client.
- * This way the server can handle multiple clients at the same time.
- *
- * This keyword should be used in setters, passing the object as an argument,
- * and to call alternate constructors (a constructor with a different set of
- * arguments.
- */
+
 
 
 public class ClientHandler implements Runnable {
 
-    // Array list of all the threads handling clients so each message can be sent to the client the thread is handling.
     public static ArrayList<ClientHandler> clientHandlers = new ArrayList<>();
-    // Id that will increment with each new client.
 
-    // Socket for a connection, buffer reader and writer for receiving and sending data respectively.
+
+
     private Socket socket;
     private BufferedReader bufferedReader;
     private BufferedWriter bufferedWriter;
