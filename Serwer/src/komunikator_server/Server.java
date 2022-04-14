@@ -1,7 +1,8 @@
+package komunikator_server;
+
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.Observer;
 
 
 public class Server {

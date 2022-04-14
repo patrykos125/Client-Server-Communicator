@@ -1,9 +1,5 @@
+package komunikator_server;
 
-// 1. Open a socket.
-// 2. Open an input stream and output stream to the socket.
-// 3. Read from and write to the stream according to the server's protocol.
-// 4. Close the streams.
-// 5. Close the socket.
 
 import java.io.*;
 import java.net.Socket;
@@ -22,6 +18,7 @@ public class ClientHandler implements Runnable {
     private BufferedReader bufferedReader;
     private BufferedWriter bufferedWriter;
     private String clientUsername;
+    private ObjectOutputStream objectOutputStream;
 
 
     public ClientHandler(Socket socket) {
@@ -31,6 +28,7 @@ public class ClientHandler implements Runnable {
             this.socket = socket;
             this.bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             this.bufferedWriter= new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
+       //     this.objectOutputStream= new ObjectOutputStream(socket.getOutputStream());
 
             validNick();
 
@@ -41,7 +39,9 @@ public class ClientHandler implements Runnable {
     }
     public void validNick(){
         try{
-        String nickToValid = bufferedReader.readLine();
+
+
+            String nickToValid = bufferedReader.readLine();
         boolean valid=true;
         for(ClientHandler client:clientHandlers)
             {
@@ -71,7 +71,7 @@ public class ClientHandler implements Runnable {
 
 
         }
-        catch(IOException e){e.printStackTrace();}
+        catch(Exception e){e.printStackTrace();}
 
     }
 
@@ -82,6 +82,7 @@ public class ClientHandler implements Runnable {
 
         while (socket.isConnected()) {
             try {
+
 
                 messageFromClient = bufferedReader.readLine();
                 broadcastMessage(messageFromClient);
@@ -95,10 +96,15 @@ public class ClientHandler implements Runnable {
 
 
     public void broadcastMessage(String messageToSend) {
+
         for (ClientHandler clientHandler : clientHandlers) {
             try {
-                // You don't want to broadcast the message to the user who sent it.
+
+
+
                 if (!clientHandler.clientUsername.equals(clientUsername)) {
+
+
                     clientHandler.bufferedWriter.write(messageToSend);
                     clientHandler.bufferedWriter.newLine();
                     clientHandler.bufferedWriter.flush();

@@ -13,6 +13,7 @@ public class Logic {
     private Socket socket;
     private BufferedReader bufferedReader;
     private BufferedWriter bufferedWriter;
+    private ObjectInputStream objectInputStream;
     private String username;
 
     public Logic(String adresIP, String port, String username) {
@@ -24,6 +25,7 @@ public class Logic {
 
             this.bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             this.bufferedWriter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
+           // this.objectInputStream = new ObjectInputStream(new ObjectInputStream(socket.getInputStream()));
         } catch (IOException e) {
 
 
@@ -39,11 +41,12 @@ new Thread(new Runnable() {
         try {
 
 
+
             bufferedWriter.write(username + " : " + messageToSend);
             bufferedWriter.newLine();
             bufferedWriter.flush();
 
-        } catch (IOException e) {
+        } catch (Exception e) {
 
             closeEverything();
         }
@@ -104,6 +107,9 @@ new Thread(new Runnable() {
 
         String status = "";
         try {
+
+
+
             bufferedWriter.write(username);
             bufferedWriter.newLine();
             bufferedWriter.flush();

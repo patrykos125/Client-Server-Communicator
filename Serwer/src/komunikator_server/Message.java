@@ -1,3 +1,5 @@
+package komunikator_server;
+
 import java.io.Serializable;
 import java.util.UUID;
 
@@ -20,8 +22,8 @@ public class Message implements Serializable {
         this.author = author;
         this.typy = typy;
         this.message = message;
+        this.uuid=UUID.randomUUID();
     }
 
-    public Message() {
-    }
+
 }
