@@ -1,19 +1,17 @@
 package com.example.komunikator_klient;
 
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Text;
+import resourses.Message;
 
 import java.io.*;
 import java.net.Socket;
-import java.util.Scanner;
 
 public class Logic {
 
     private Socket socket;
-    private BufferedReader bufferedReader;
-    private BufferedWriter bufferedWriter;
+
     private ObjectInputStream objectInputStream;
+    private ObjectOutputStream objectOutputStream;
     private String username;
 
     public Logic(String adresIP, String port, String username) {
@@ -22,10 +20,8 @@ public class Logic {
 
             this.username = username;
             this.socket = socket;
-
-            this.bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            this.bufferedWriter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
-           // this.objectInputStream = new ObjectInputStream(new ObjectInputStream(socket.getInputStream()));
+            this.objectInputStream = new ObjectInputStream( socket.getInputStream());
+            this.objectOutputStream = new ObjectOutputStream( socket.getOutputStream());
         } catch (IOException e) {
 
 
@@ -39,12 +35,11 @@ new Thread(new Runnable() {
     @Override
     public void run() {
         try {
+            objectOutputStream.writeObject(new Message(username,"message",messageToSend));
+            objectOutputStream.flush();
 
 
 
-            bufferedWriter.write(username + " : " + messageToSend);
-            bufferedWriter.newLine();
-            bufferedWriter.flush();
 
         } catch (Exception e) {
 
@@ -64,18 +59,18 @@ new Thread(new Runnable() {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                String msgFromGroupChat;
+                Message msgFromGroupChat;
 
                 while (socket.isConnected()) {
                     try {
 
-                        msgFromGroupChat = bufferedReader.readLine();
+                        msgFromGroupChat = (Message) objectInputStream.readObject();
 
 
-                        Controler_main.receiveMessage(msgFromGroupChat, vbox);
+                        Controler_main.receiveMessage(msgFromGroupChat.getAuthor()+": "+msgFromGroupChat.getMessage(), vbox);
 
 
-                    } catch (IOException e) {
+                    } catch (Exception e) {
 
                         closeEverything();
                     }
@@ -88,11 +83,11 @@ new Thread(new Runnable() {
     public void closeEverything() {
 
         try {
-            if (bufferedReader != null) {
-                bufferedReader.close();
+            if (objectInputStream != null) {
+                objectInputStream.close();
             }
-            if (bufferedWriter != null) {
-                bufferedWriter.close();
+            if (objectOutputStream != null) {
+                objectOutputStream.close();
             }
             if (socket != null) {
                 socket.close();
@@ -104,25 +99,27 @@ new Thread(new Runnable() {
 
     public boolean validNick() {
 
+        Message request = new Message("newUser","nickValidation",username);
 
-        String status = "";
+        Message response=null;
+
         try {
+            objectOutputStream.writeObject(new Message("newUser","nickValidation",username));
+            objectOutputStream.flush();
 
 
 
-            bufferedWriter.write(username);
-            bufferedWriter.newLine();
-            bufferedWriter.flush();
-            status = bufferedReader.readLine();
+
+            response = (Message) objectInputStream.readObject();
 
         } catch (Exception e) {
             e.printStackTrace();
         }
 
 
-        if (status.equals("badNick")) return false;
+        if (response.getMessage().equals("nickOK") && response.getUuid() == request.getUuid()) return true;
         else {
-            return true;
+            return false;
         }
 
     }

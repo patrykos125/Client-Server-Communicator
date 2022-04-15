@@ -6,8 +6,8 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="219.0" prefWidth="317.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.komunikator_klient.Controler_login">
-   <children>
+<Pane fx:id="pane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="219.0" prefWidth="317.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.komunikator_klient.Controler_login">
+
       <Button fx:id="connectButton" layoutX="220.0" layoutY="151.0" mnemonicParsing="false" onAction="#connectAction" text="Connect" />
       <TextField fx:id="adresIP" layoutX="84.0" layoutY="35.0" text="localhost" />
       <TextField fx:id="port" layoutX="84.0" layoutY="77.0" text="8000" />
@@ -21,5 +21,5 @@
          </font></Label>
 
 
-   </children>
+
 </Pane>
