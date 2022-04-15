@@ -10,6 +10,7 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -26,7 +27,6 @@ public class Controler_main implements Initializable {
 
 
     @FXML
-
     private VBox messageList;
     @FXML
     private TextField sendFiel;
