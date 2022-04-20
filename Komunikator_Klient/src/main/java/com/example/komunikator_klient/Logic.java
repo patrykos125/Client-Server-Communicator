@@ -1,10 +1,19 @@
 package com.example.komunikator_klient;
 
 import javafx.scene.layout.VBox;
+import resourses.AES;
 import resourses.Message;
+import resourses.RSA;
 
 import java.io.*;
 import java.net.Socket;
+import java.security.KeyFactory;
+import java.security.KeyPair;
+import java.security.PrivateKey;
+import java.security.PublicKey;
+import java.security.spec.PKCS8EncodedKeySpec;
+import java.security.spec.X509EncodedKeySpec;
+import java.util.Base64;
 
 public class Logic {
 
@@ -14,6 +23,9 @@ public class Logic {
     private ObjectOutputStream objectOutputStream;
     private String username;
 
+  private  AES aes;
+
+
     public Logic(String adresIP, String port, String username) {
         try {
             Socket socket = new Socket(adresIP, Integer.parseInt(port));
@@ -22,6 +34,7 @@ public class Logic {
             this.socket = socket;
             this.objectInputStream = new ObjectInputStream( socket.getInputStream());
             this.objectOutputStream = new ObjectOutputStream( socket.getOutputStream());
+            this.aes = new AES();
         } catch (IOException e) {
 
 
@@ -35,7 +48,7 @@ new Thread(new Runnable() {
     @Override
     public void run() {
         try {
-            objectOutputStream.writeObject(new Message(username,"message",messageToSend));
+            objectOutputStream.writeObject(new Message(username,"message", aes.encrypt(messageToSend)));
             objectOutputStream.flush();
 
 
@@ -67,7 +80,7 @@ new Thread(new Runnable() {
                         msgFromGroupChat = (Message) objectInputStream.readObject();
 
 
-                        Controler_main.receiveMessage(msgFromGroupChat.getAuthor()+": "+msgFromGroupChat.getMessage(), vbox);
+                        Controler_main.receiveMessage(msgFromGroupChat.getAuthor()+": "+aes.decrypt(msgFromGroupChat.getMessage()), vbox);
 
 
                     } catch (Exception e) {
@@ -117,10 +130,41 @@ new Thread(new Runnable() {
         }
 
 
-        if (response.getMessage().equals("nickOK") && response.getUuid() == request.getUuid()) return true;
+        if (response.getMessage().equals("nickOK") && response.getUuid() == request.getUuid()) {
+            synchroKey();return true;}
         else {
             return false;
         }
+
+    }
+
+    private void synchroKey() {
+        RSA rsa= new RSA();
+
+        PublicKey temporaryPublicKey = rsa.getPublic();
+        try {
+            //send rsa public key
+
+            objectOutputStream.writeObject(temporaryPublicKey);
+            objectOutputStream.flush();
+
+            //get aes secret key
+
+            String aesEmncryptedKey =(String) objectInputStream.readObject();
+            String aesKey = rsa.decrypt(aesEmncryptedKey);
+
+            //get aes IV
+
+            String aesEncryptedIV = (String)objectInputStream.readObject();
+            String aesIV = rsa.decrypt(aesEncryptedIV);
+
+            //init aes
+            aes.initFromStrings(aesKey,aesIV);
+
+
+        }catch (Exception e){e.printStackTrace();}
+
+
 
     }
 
