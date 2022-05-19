@@ -5,16 +5,11 @@ import resourses.AES;
 import resourses.Message;
 import resourses.RSA;
 
-import javax.crypto.SecretKey;
-import javax.swing.plaf.synth.SynthOptionPaneUI;
-import java.io.*;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.security.KeyFactory;
-import java.security.KeyPair;
-import java.security.PrivateKey;
 import java.security.PublicKey;
-import java.security.spec.KeySpec;
-import java.security.spec.X509EncodedKeySpec;
 import java.util.ArrayList;
 import java.util.Base64;
 

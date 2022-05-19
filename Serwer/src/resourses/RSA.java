@@ -27,43 +27,14 @@ public class RSA {
         byte[] decryptedMessage = cipher.doFinal(encryptedBytes);
         return  new String(decryptedMessage,"UTF8");
     }
-    public byte[] encryptKey(byte[] toEncrypt,PublicKey publicKey)throws Exception{
-        Cipher cipher = Cipher.getInstance("RSA/ECB/PKCS1Padding");
-        cipher.init(Cipher.ENCRYPT_MODE,publicKey);
-        byte [] encryptedBytes = cipher.doFinal(toEncrypt);
-        return encryptedBytes;
-    }
 
 
 
 
-    public KeyPair getKey(){
-        KeyPair keyPair=null;
-
-        try {
-            KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("RSA");
-            keyPairGenerator.initialize(2048);
-             keyPair = keyPairGenerator.generateKeyPair();
-
-        }catch(Exception e){e.printStackTrace();}
-        return keyPair;
-    }
 
 
 
-    public static void main(String[] args) {
 
 
-        try{
-            String sting="dupa";
-            byte [] bity=Base64.getDecoder().decode(sting);
-            String odkodowane = Base64.getEncoder().encodeToString(bity);
-            System.out.println(odkodowane);
-
-
-
-        }
-        catch (Exception e){e.printStackTrace();}
-    }
 
 }
