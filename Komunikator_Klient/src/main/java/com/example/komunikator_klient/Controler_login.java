@@ -1,3 +1,4 @@
+
 package com.example.komunikator_klient;
 
 
@@ -96,4 +97,3 @@ public class Controler_login implements Initializable {
 
         });
     }
-}
