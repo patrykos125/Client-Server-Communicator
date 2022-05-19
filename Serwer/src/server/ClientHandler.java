@@ -55,14 +55,14 @@ public class ClientHandler implements Runnable {
 
             String nickToValid =message.getMessage();
 
-        boolean valid=true;
-        for(ClientHandler client: users)
+            boolean valid=true;
+            for(ClientHandler client: users)
             {
 
-            if(client.clientUsername.equals(nickToValid)){
-                valid=false;
-                break;
-            }
+                if(client.clientUsername.equals(nickToValid)){
+                    valid=false;
+                    break;
+                }
 
             }
             if(valid){
@@ -72,7 +72,7 @@ public class ClientHandler implements Runnable {
 
 
                 objectOutputStream.writeObject(new Message("SERVER","nickValidation","nickOK"
-                ,message.getUuid()));
+                        ,message.getUuid()));
                 objectOutputStream.flush();
 
                 synchroKey();
@@ -95,7 +95,7 @@ public class ClientHandler implements Runnable {
     }
 
     private void synchroKey() {
-RSA rsa = new RSA();
+        RSA rsa = new RSA();
 
 
 
@@ -109,18 +109,18 @@ RSA rsa = new RSA();
 
             //send encrypted secret key
 
-           objectOutputStream.writeObject(aesEncryptedKey);
-           objectOutputStream.flush();
+            objectOutputStream.writeObject(aesEncryptedKey);
+            objectOutputStream.flush();
 
-           //encrypt IV using public rsa key
+            //encrypt IV using public rsa key
 
-           String aesIV=Base64.getEncoder().encodeToString(aes.exportVI());
-           String aesEncryptedIV = rsa.encrypt(aesIV,publicKey);
+            String aesIV=Base64.getEncoder().encodeToString(aes.exportVI());
+            String aesEncryptedIV = rsa.encrypt(aesIV,publicKey);
 
-           //send encrypted IV
+            //send encrypted IV
 
-           objectOutputStream.writeObject(aesEncryptedIV);
-           objectOutputStream.flush();
+            objectOutputStream.writeObject(aesEncryptedIV);
+            objectOutputStream.flush();
 
 
 
@@ -174,9 +174,9 @@ RSA rsa = new RSA();
 
                     Message encryptedToSend=user.encryptMessage(message);
 
-                   user.objectOutputStream.writeObject(encryptedToSend);
+                    user.objectOutputStream.writeObject(encryptedToSend);
                     objectOutputStream.flush();
-                     // aby zobzaczyc klucze odkomentuj
+                    // aby zobzaczyc klucze odkomentuj
                     // System.out.println(encryptedToSend.getMessage());
 
 
@@ -190,7 +190,7 @@ RSA rsa = new RSA();
     private Message decrypttMessage(Message encryptedMessage){
         Message message= new Message();
         try {
-             message = new Message(
+            message = new Message(
                     encryptedMessage.getAuthor(),
                     encryptedMessage.getTypy(),
                     aes.decrypt(encryptedMessage.getMessage()),
@@ -228,8 +228,8 @@ RSA rsa = new RSA();
 
     public void removeClientHandler() {
 
-    if(clientUsername!=null)
-        broadcastMessage(new Message("SERVER","leftMessage",clientUsername+" has left the chat!"));
+        if(clientUsername!=null)
+            broadcastMessage(new Message("SERVER","leftMessage",clientUsername+" has left the chat!"));
         users.remove(this);
 
 
