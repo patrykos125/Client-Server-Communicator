@@ -44,20 +44,17 @@ public class Logic {
 
 
     public void sendMessage(String messageToSend) {
-new Thread(new Runnable() {
-    @Override
-    public void run() {
-        try {
-            objectOutputStream.writeObject(new Message(username,"message", aes.encrypt(messageToSend)));
-            objectOutputStream.flush();
+new Thread(() -> {
+    try {
+        objectOutputStream.writeObject(new Message(username,"message", aes.encrypt(messageToSend)));
+        objectOutputStream.flush();
 
 
 
 
-        } catch (Exception e) {
+    } catch (Exception e) {
 
-            closeEverything();
-        }
+        closeEverything();
     }
 }).start();
 
@@ -69,24 +66,21 @@ new Thread(new Runnable() {
 
 
     public void listenForMessage(VBox vbox) {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                Message msgFromGroupChat;
+        new Thread(() -> {
+            Message msgFromGroupChat;
 
-                while (socket.isConnected()) {
-                    try {
+            while (socket.isConnected()) {
+                try {
 
-                        msgFromGroupChat = (Message) objectInputStream.readObject();
+                    msgFromGroupChat = (Message) objectInputStream.readObject();
 
 
-                        Controler_main.receiveMessage(msgFromGroupChat.getAuthor()+": "+aes.decrypt(msgFromGroupChat.getMessage()), vbox);
+                    Controler_main.receiveMessage(msgFromGroupChat.getAuthor()+": "+aes.decrypt(msgFromGroupChat.getMessage()), vbox);
 
 
-                    } catch (Exception e) {
+                } catch (Exception e) {
 
-                        closeEverything();
-                    }
+                    closeEverything();
                 }
             }
         }).start();

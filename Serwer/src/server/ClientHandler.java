@@ -70,7 +70,6 @@ public class ClientHandler implements Runnable {
 
                 users.add(this);
 
-
                 objectOutputStream.writeObject(new Message("SERVER","nickValidation","nickOK"
                         ,message.getUuid()));
                 objectOutputStream.flush();
@@ -149,7 +148,6 @@ public class ClientHandler implements Runnable {
                 Message messageToSend= decrypttMessage(messageFromClient);
 
 
-
                 broadcastMessage(messageToSend);
 
             } catch (Exception e) {
@@ -176,8 +174,7 @@ public class ClientHandler implements Runnable {
 
                     user.objectOutputStream.writeObject(encryptedToSend);
                     objectOutputStream.flush();
-                    // aby zobzaczyc klucze odkomentuj
-                    // System.out.println(encryptedToSend.getMessage());
+
 
 
                 }

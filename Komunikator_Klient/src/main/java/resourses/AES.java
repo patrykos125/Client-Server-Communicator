@@ -23,6 +23,8 @@ public class AES {
             generator.init(KEY_SIZE);
             cipher=Cipher.getInstance("AES/GCM/NoPadding");
             key= generator.generateKey();
+            cipher.init(Cipher.ENCRYPT_MODE,key);
+            IV=cipher.getIV();
         }catch (Exception e){e.printStackTrace();}
 
     }

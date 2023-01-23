@@ -8,43 +8,43 @@ import java.security.PublicKey;
 import java.util.Base64;
 
 public class RSA {
-KeyPair keyPair;
+    KeyPair keyPair;
 
-    public RSA(){
-        try{
-        KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("RSA");
-        keyPairGenerator.initialize(2048);
-        keyPair = keyPairGenerator.generateKeyPair();}catch (Exception e){e.printStackTrace();}
+    public RSA() {
+        try {
+            KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("RSA");
+            keyPairGenerator.initialize(2048);
+            keyPair = keyPairGenerator.generateKeyPair();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
     }
-    public String encrypt (String message ) throws Exception{
+
+    public String encrypt(String message) throws Exception {
         byte[] messgeToBytes = message.getBytes();
         Cipher cipher = Cipher.getInstance("RSA/ECB/PKCS1Padding");
         cipher.init(Cipher.ENCRYPT_MODE, keyPair.getPublic());
-        byte [] encryptedBytes = cipher.doFinal(messgeToBytes);
+        byte[] encryptedBytes = cipher.doFinal(messgeToBytes);
         return Base64.getEncoder().encodeToString(encryptedBytes);
     }
 
 
-    public String decrypt(String encryptedMessage ) throws Exception {
-        byte [] encryptedBytes = Base64.getDecoder().decode (encryptedMessage);
+    public String decrypt(String encryptedMessage) throws Exception {
+        byte[] encryptedBytes = Base64.getDecoder().decode(encryptedMessage);
         Cipher cipher = Cipher.getInstance("RSA/ECB/PKCS1Padding");
         cipher.init(Cipher.DECRYPT_MODE, keyPair.getPrivate());
         byte[] decryptedMessage = cipher.doFinal(encryptedBytes);
-        return  new String(decryptedMessage,"UTF8");
+        return new String(decryptedMessage, "UTF8");
     }
 
 
+    public PublicKey getPublic() {
 
-    public PublicKey getPublic (){
-
-return keyPair.getPublic();
+        return keyPair.getPublic();
 
 
     }
-
-
-
 
 
 }
